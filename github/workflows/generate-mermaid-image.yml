@@ -1,10 +1,10 @@
-
 name: Generate Mermaid image
 
 on:
   push:
     branches:
       - add/diagram-image
+      - add/diagram-image-1
   workflow_dispatch:
 
 jobs:
@@ -42,5 +42,4 @@ jobs:
           branch: add/diagram-image
           title: "Add diagram image generated from Mermaid"
           body: "Esta PR añade la imagen generada a partir de motivation_diagram.md (diagrams/motivation_diagram.png)."
-Danitza Del Alamo  
-
+DANITZA DEL ALAMO
