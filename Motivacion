@@ -1,5 +1,5 @@
 ```mermaid
-graph TD
+flowchart TD
     A[Teorías Clásicas de la Motivación] --> B{Enfoque en las Necesidades}
     A --> C{Enfoque en los Resultados / Comportamiento}
     A --> D{Enfoque en el Contexto Laboral}
