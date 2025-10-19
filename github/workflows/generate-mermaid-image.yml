@@ -1,0 +1,43 @@
+name: Generate Mermaid image
+
+on:
+  push:
+    branches:
+      - add/diagram-image
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Extract mermaid block from motivation_diagram.md
+        run: |
+          mkdir -p diagrams
+          # Extrae el primer bloque ```mermaid``` y lo guarda en diagrams/motivation_diagram.mmd
+          awk 'BEGIN{p=0} /^```mermaid/{p=1; next} /^```/{if(p){exit}} p{print}' motivation_diagram.md > diagrams/motivation_diagram.mmd
+          echo "Contenido extraído:"
+          sed -n '1,200p' diagrams/motivation_diagram.mmd
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install mermaid-cli and generate image
+        run: |
+          npm install @mermaid-js/mermaid-cli
+          npx mmdc -i diagrams/motivation_diagram.mmd -o diagrams/motivation_diagram.png --backgroundColor transparent
+
+      - name: Create PR with generated image
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add generated mermaid diagram image"
+          branch: add/diagram-image
+          title: "Add diagram image generated from Mermaid"
+          body: "Esta PR añade la imagen generada a partir de motivation_diagram.md (diagrams/motivation_diagram.png)."
